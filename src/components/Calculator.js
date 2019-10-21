@@ -6,6 +6,7 @@ import {
   TextInput,
   CheckBox,
   TouchableOpacity,
+  Dimensions
 } from 'react-native';
 
 
@@ -173,7 +174,7 @@ class Calculator extends Component {
    if(this.state.checked1 && this.state.checked2 && this.state.checked3){
       if(this.state.input1 && this.state.input2 && this.state.input3){
         this.setState({
-          result: this.state.input1 / this.state.input2 / this.state.input3
+          result: parseFloat(this.state.input1 / this.state.input2 / this.state.input3).toFixed(8)
         })
       } else{
         this.setState({
@@ -183,7 +184,7 @@ class Calculator extends Component {
   } else if(this.state.checked1 && this.state.checked2){
       if(this.state.input1 && this.state.input2){
         this.setState({
-          result: this.state.input1 / this.state.input2
+          result: parseFloat(this.state.input1 / this.state.input2).toFixed(8)
         })
       } else{
         this.setState({
@@ -193,7 +194,7 @@ class Calculator extends Component {
   } else if(this.state.checked1 && this.state.checked3){
       if(this.state.input1 && this.state.input3){
         this.setState({
-          result: this.state.input1 / this.state.input3
+          result: parseFloat(this.state.input1 / this.state.input3).toFixed(8)
         })
       } else{
         this.setState({
@@ -203,7 +204,7 @@ class Calculator extends Component {
   }else if(this.state.checked2 && this.state.checked3){
       if(this.state.input2 && this.state.input3){
         this.setState({
-          result: this.state.input2 / this.state.input3
+          result: parseFloat(this.state.input2 / this.state.input3).toFixed(8)
         })
       } 
    else{
@@ -231,12 +232,12 @@ class Calculator extends Component {
   render() {
     return (
       <View style={styles.container}>
+      <View style={styles.header}><Text style={styles.headertext}>Calculator App</Text></View>
         <View style={styles.input}>
           <TextInput
             style={styles.inputtext}
             placeholder="Enter Value here"
             onChangeText={input => this.setState({input1: parseInt(input)})}
-            // value={this.state.input1}
             keyboardType={'numeric'}
           />
           <CheckBox style={styles.checkbox} value={this.state.checked1} onChange={()=>this.checkBoxtTest()} />
@@ -246,7 +247,6 @@ class Calculator extends Component {
             style={styles.inputtext}
             placeholder="Enter Value here"
             onChangeText={input => this.setState({input2: parseInt(input)})}
-            // value={this.state.input2}
             keyboardType={'numeric'}
           />
           <CheckBox style={styles.checkbox} value={this.state.checked2} onChange={()=>this.checkBoxtTest2()} />
@@ -256,28 +256,30 @@ class Calculator extends Component {
             style={styles.inputtext}
             placeholder="Enter Value here"
             onChangeText={input => this.setState({input3: parseInt(input)})}
-            // value={this.state.input3}
             keyboardType={'numeric'}
           />
           <CheckBox style={styles.checkbox} value={this.state.checked3} onChange={()=>this.checkBoxtTest3()}/>
         </View>
-        <View style={{flexDirection: 'row', marginLeft: -50}}>
-          <TouchableOpacity style={styles.button} onPress={this.add}>
-            <Text>+</Text>
-          </TouchableOpacity>
+        <View style={{flexDirection: 'row'}}>
+          <View>
+            <TouchableOpacity style={styles.button} onPress={this.add}>
+              <Text style={styles.btn}>+</Text>
+            </TouchableOpacity>
+          </View>
           <TouchableOpacity style={styles.button} onPress={this.min}>
-            <Text style={{fontSize: 20}}>-</Text>
+            <Text style={{color: '#FFF', fontSize: 50, marginBottom: 5}}>-</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.button} onPress={this.multiply}>
-            <Text>X</Text>
+            <Text style={styles.btn}>X</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.button} onPress={this.divide}>
-            <Text>/</Text>
+            <Text style={styles.btn}>/</Text>
           </TouchableOpacity>
         </View>
-        <View style={styles.ul} />
+        <View style={styles.footer}>
         <Text style={styles.output}> Hasil:</Text>
-        <Text style={styles.num}>{this.state.result}</Text>
+        <Text style={this.state.result == 'invalid' ? styles.invalid: styles.num}>{this.state.result}</Text>
+      </View>
       </View>
     );
   }
@@ -285,36 +287,71 @@ class Calculator extends Component {
 const styles = StyleSheet.create({
   container: {
     marginTop: 30,
+    backgroundColor: '#FFF',
+    alignSelf: 'center',
+    paddingLeft: 20,
+    paddingRight: 20,
+  },
+  header: {
+    backgroundColor: '#00b89C',
+    height: 50,
+    justifyContent: 'center',
     alignItems: 'center',
+    alignSelf: 'center',
+    width: 250,
+    padding: 10,
+    borderBottomLeftRadius: 10,
+    borderBottomRightRadius: 10,
+    marginBottom: 50,
+  },
+  headertext: {
+    fontSize: 26,
+    color: '#FFF'
+  },
+  btn: {
+    color: '#FFF',
+    fontSize: 25,
   },
   input: {
     flexDirection: 'row',
-    marginTop: 30,
+    marginTop: 20,
   },
   inputtext: {
     height: 40,
-    width: '60%',
-    borderColor: 'black',
-    borderWidth: 2,
+    width: '92%',
+    borderColor: 'gray',
+    borderWidth: 1.5,
+    paddingHorizontal: 10,
+    borderTopLeftRadius: 8,
+    borderBottomLeftRadius: 8,
+    borderBottomRightRadius: 8,
   },
   checkbox: {
     alignItems: 'center',
     justifyContent: 'center',
     alignSelf: 'center',
+    color: '#fff'
   },
-  ul : {
-    borderWidth: 1,
-    marginTop: 20,
-    width: '60%',
-    marginLeft: -30,
+   footer: {
+    backgroundColor: '#00b89C',
+    height: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignSelf: 'center',
+    width: 325,
+    padding: 10,
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10,
+    marginTop: 50,
   },
   button: {
-    marginTop: 20,
-    marginLeft: 20,
-    borderColor: 'black',
+    marginTop: 15,
+    marginRight: 10,
+    backgroundColor: '#00b89C',
+    borderColor: 'transparent',
     borderWidth: 1,
-    height: 30,
-    width: 40,
+    height: 45,
+    width: 67,
     borderRadius: 10,
     justifyContent: 'center',
     alignItems: 'center',
@@ -323,15 +360,30 @@ const styles = StyleSheet.create({
     fontSize: 26,
     marginTop: 20,
     position: 'relative',
-    right: 90,
-    top: 0,
+    alignSelf: 'flex-start',
+    right: 0,
+    top: 20,
+    color: '#FFF',
   },
   num: {
     fontSize: 26,
     marginTop: 20,
+    marginRight: 5,
     position: 'relative',
-    left: 25,
-    bottom: 55,
+    alignSelf: 'flex-end',
+    left: 0,
+    bottom: 35,
+    color: '#FFF',
+  },
+  invalid: {
+    fontSize: 26,
+    marginTop: 20,
+    marginRight: 5,
+    position: 'relative',
+    alignSelf: 'flex-end',
+    left: 0,
+    bottom: 35,
+    color: 'red',
   },
 });
 
